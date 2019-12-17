@@ -65,7 +65,7 @@ class Trainer:
         self._posteriors = OrderedDict()
         self.seed = seed
 
-        self.data_loader_kwargs = {"batch_size": 128, "pin_memory": use_cuda}
+        self.data_loader_kwargs = {"batch_size": 256, "pin_memory": use_cuda} # 128 for batchsize in init
         self.data_loader_kwargs.update(data_loader_kwargs)
 
         self.weight_decay = weight_decay
@@ -153,6 +153,7 @@ class Trainer:
                     if tensors_list[0][0].shape[0] < 3:
                         continue
                     loss = self.loss(*tensors_list)
+                    print(loss)
                     optimizer.zero_grad()
                     loss.backward()
                     optimizer.step()

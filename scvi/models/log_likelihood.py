@@ -199,6 +199,31 @@ def compute_marginal_log_likelihood_autozi(autozivae, posterior, n_samples_mc=10
     # The minus sign is there because we actually look at the negative log likelihood
     return -log_lkl / n_samples
 
+def binary_cross_entropy(x, recon_x, eps=1e-8):
+    recon_x = torch.sigmoid(recon_x)
+    res = (x * torch.log(recon_x + eps) + (1 - x) * torch.log(1 - recon_x + eps))
+#    print(torch.mean(recon_x))
+    return res
+
+def log_zip_positive(x, mu, pi, eps=1e-8):
+    # the likelihood of zero probability p(x=0) = -softplus(-pi)+softplus(-pi-mu)
+    softplus_pi = F.softplus(-pi)
+    softplus_mu_pi = F.softplus(-pi-mu)
+    case_zero = - softplus_pi + softplus_mu_pi
+    mul_case_zero = torch.mul((x < eps).type(torch.float32), case_zero)
+
+    # the likelihood of p(x>0) = -softplus(-pi) - pi - mu +x*ln(mu) - ln(x!)
+    case_non_zero = (
+        - softplus_pi
+        - pi - mu
+        + x * torch.log(mu + eps)
+        - torch.lgamma(x + 1)
+    )
+    mul_case_non_zero = torch.mul((x > eps).type(torch.float32), case_non_zero)
+
+    res = mul_case_zero + mul_case_non_zero
+
+    return res
 
 def log_zinb_positive(x, mu, theta, pi, eps=1e-8):
     """

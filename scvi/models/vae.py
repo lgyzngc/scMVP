@@ -7,7 +7,7 @@ import torch.nn.functional as F
 from torch.distributions import Normal, kl_divergence as kl
 
 from scvi.models.log_likelihood import log_zinb_positive, log_nb_positive
-from scvi.models.modules import Encoder, DecoderSCVI, LinearDecoderSCVI
+from scvi.models.modules import Encoder, DecoderSCVI, LinearDecoderSCVI, Multi_Encoder
 from scvi.models.utils import one_hot
 
 torch.backends.cudnn.benchmark = True
@@ -24,6 +24,9 @@ class VAE(nn.Module):
     :param n_latent: Dimensionality of the latent space
     :param n_layers: Number of hidden layers used for encoder and decoder NNs
     :param dropout_rate: Dropout rate for neural networks
+    :param mode: One of the following:
+        * ``'vae'`` -single channel auto-encoder decoder neural framework for scRNA-seq data
+        * ``'mm-vae'`` -multi-channels auto-encoder decoder neural framework for scRNA and scATAC data
     :param dispersion: One of the following
 
         * ``'gene'`` - dispersion parameter of NB is constant per gene across cells
@@ -80,7 +83,6 @@ class VAE(nn.Module):
                 " 'gene-label', 'gene-cell'], but input was "
                 "{}.format(self.dispersion)"
             )
-
         # z encoder goes from the n_input-dimensional data to an n_latent-d
         # latent space representation
         self.z_encoder = Encoder(

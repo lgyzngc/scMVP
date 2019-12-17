@@ -20,6 +20,8 @@ from scvi.dataset.pbmc import PbmcDataset, PurifiedPBMCDataset
 from scvi.dataset.seqfish import SeqfishDataset
 from scvi.dataset.seqfishplus import SeqFishPlusDataset
 from scvi.dataset.smfish import SmfishDataset
+from scvi.dataset.snareDataset import snareDataset
+from scvi.dataset.scienceDataset import scienceDataset
 from scvi.dataset.synthetic import (
     SyntheticDataset,
     SyntheticRandomDataset,
@@ -50,9 +52,11 @@ __all__ = [
     "PreFrontalCortexStarmapDataset",
     "PbmcDataset",
     "PurifiedPBMCDataset",
+    "scienceDataset",
     "SeqfishDataset",
     "SeqFishPlusDataset",
     "SmfishDataset",
+    "snareDataset",
     "SyntheticDataset",
     "SyntheticRandomDataset",
     "SyntheticDatasetCorr",

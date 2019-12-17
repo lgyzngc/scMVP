@@ -70,8 +70,8 @@ class FCLayers(nn.Module):
                         ),
                     )
                     for i, (n_in, n_out) in enumerate(
-                        zip(layers_dim[:-1], layers_dim[1:])
-                    )
+                    zip(layers_dim[:-1], layers_dim[1:])
+                )
                 ]
             )
         )
@@ -180,6 +180,145 @@ class Encoder(nn.Module):
         latent = reparameterize_gaussian(q_m, q_v)
         return q_m, q_v, latent
 
+
+# Multi-Encoder
+class Multi_Encoder(nn.Module):
+    def __init__(
+        self,
+        RNA_input: int,
+        ATAC_input,
+        n_output: int,
+        n_cat_list: Iterable[int] = None,
+        n_layers: int = 1,
+        n_hidden: int = 128,
+        dropout_rate: float = 0.1,
+    ):
+        super().__init__()
+        self.scRNA_encoder = FCLayers(
+            n_in=RNA_input,
+            n_out=n_hidden,
+            n_cat_list=n_cat_list,
+            n_layers=n_layers,
+            n_hidden=n_hidden,
+            dropout_rate=dropout_rate,
+        )
+        self.scATAC_encoder = FCLayers(
+            n_in=ATAC_input,
+            n_out=n_hidden,
+            n_cat_list=n_cat_list,
+            n_layers=n_layers,
+            n_hidden=n_hidden,
+            dropout_rate=dropout_rate,
+        )
+        self.concat1 = nn.Linear(2 * n_hidden, n_hidden)
+        self.concat2 = nn.Linear(n_hidden, n_hidden)
+        self.mean_encoder = nn.Linear(n_hidden, n_output)
+        self.var_encoder = nn.Linear(n_hidden, n_output)
+
+    def forward(self, x: list, *cat_list: int):
+        # Parameters for latent distribution
+        if x.__len__() != 2:
+            raise ValueError("Input training data should be 2 data types(RNA and ATAC),"
+                             "but input was only {}.format(x.__len__())"
+                             )
+        if not torch.is_tensor(x[0]):
+            raise ValueError("training data should be a tensor!"
+                             )
+
+        q1 = self.scRNA_encoder(x[0], *cat_list)
+        q2 = self.scATAC_encoder(x[1], *cat_list)
+        q = self.concat2(self.concat1(torch.cat((q1, q2), 1)))
+        q_m = self.mean_encoder(q)
+        q_v = torch.exp(self.var_encoder(q)) + 1e-4
+        latent = reparameterize_gaussian(q_m, q_v)
+        return q_m, q_v, latent
+
+# Multi-Encoder
+class Multi_Decoder(nn.Module):
+    def __init__(
+        self,
+        n_input: int,
+        RNA_output: int,
+        ATAC_output: int,
+        n_cat_list: Iterable[int] = None,
+        n_layers: int = 1,
+        n_hidden: int = 256,
+        dropout_rate: float = 0,
+    ):
+        super().__init__()
+
+        # RNA-seq decoder
+        self.scRNA_decoder = FCLayers(
+            n_in=n_input,
+            n_out=n_hidden,
+            n_cat_list=n_cat_list,
+            n_layers=n_layers,
+            n_hidden=n_hidden,
+            dropout_rate=dropout_rate,
+        )
+        # mean gamma
+        self.rna_scale_decoder = nn.Sequential(
+            nn.Linear(n_hidden, RNA_output), nn.Softmax(dim=-1)
+        )
+        # dispersion: here we only deal with gene-cell dispersion case
+        self.rna_r_decoder = nn.Linear(n_hidden, RNA_output)
+        # dropout
+        self.rna_dropout_decoder = nn.Linear(n_hidden, RNA_output)
+
+        # ATAC decoder
+        self.scATAC_decoder = FCLayers(
+            n_in=n_input,
+            n_out=n_hidden,
+            n_cat_list=n_cat_list,
+            n_layers=n_layers,
+            n_hidden=n_hidden,
+            dropout_rate=dropout_rate,
+        )
+        # mean possion
+        self.atac_scale_decoder = nn.Sequential(
+            nn.Linear(n_hidden, ATAC_output), nn.Softmax(dim=-1)
+        )
+        # dispersion: here we only deal with gene-cell dispersion case
+        self.atac_r_decoder = nn.Linear(n_hidden, ATAC_output)
+        # dropout
+        self.atac_dropout_decoder = nn.Linear(n_hidden, ATAC_output)
+
+        # libaray scale for each cell
+        self.libaray_decoder = FCLayers(
+            n_in=n_input,
+            n_out=n_hidden,
+            n_cat_list=n_cat_list,
+            n_layers=n_layers,
+            n_hidden=n_hidden,
+            dropout_rate=dropout_rate,
+        )
+        self.libaray_rna_scale_decoder = nn.Linear(n_hidden, 1)
+        self.libaray_atac_scale_decoder = nn.Linear(n_hidden, 1)
+
+    def forward(self, z: torch.Tensor, z_c: torch.Tensor, *cat_list: int):
+        # The decoder returns values for the parameters of the ZINB distribution of scRNA-seq
+        p_rna = self.scRNA_decoder(z, *cat_list)
+        p_rna_scale = self.rna_scale_decoder(p_rna)
+        p_rna_dropout = self.rna_dropout_decoder(p_rna)
+
+        libaray_temp = self.libaray_decoder(z_c, *cat_list)
+        libaray_gene = self.libaray_rna_scale_decoder(libaray_temp)
+
+        p_rna_rate = torch.exp(libaray_gene.clamp(max=12)) * p_rna_scale  # torch.clamp( , max=12)
+        #p_rna_rate.clamp(max=12) # maybe it is unnecessary
+        p_rna_r = self.rna_r_decoder(p_rna)
+
+        # The decoder returns values for the parameters of the ZIP distribution of scATAC-seq
+        p_atac = self.scATAC_decoder(z, *cat_list)
+        p_atac_scale = self.atac_scale_decoder(p_atac)
+        p_atac_r = self.atac_r_decoder(p_atac)
+        p_atac_dropout = self.atac_dropout_decoder(p_atac)
+
+        libaray_atac = self.libaray_atac_scale_decoder(libaray_temp)
+        p_atac_mean = torch.exp(libaray_atac.clamp(13)) * p_atac_scale # for zinp and zip loss
+        #p_atac_mean = libaray_atac * p_atac_scale # for binary loss
+
+        return p_rna_scale, p_rna_r, p_rna_rate, p_rna_dropout, p_atac_scale, p_atac_r, p_atac_mean, p_atac_dropout
 
 # Decoder
 class DecoderSCVI(nn.Module):
