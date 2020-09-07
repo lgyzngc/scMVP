@@ -45,12 +45,23 @@ def filter_dataset(dataset):
     dataset.update_genes(high_count_genes)
     dataset.subsample_genes(new_n_genes=10000)
 
-    '''
+    adata_source = anndata.AnnData(X=dataset.X)
+    #sc.pp.normalize_per_cell(adata_source, counts_per_cell_after=1e4)
+    sc.pp.log1p(adata_source)
+    sc.pp.highly_variable_genes(adata_source)
+    matplotlib.use('TkAgg')
+    sc.pl.highly_variable_genes(adata_source)
+    #sc.pl.highly_variable_genes(adata_source)
+    dataset.update_genes((adata_source.var['highly_variable']))
+
+
+
+
     # Filter atac data
-    high_count_atacs = (dataset.atac_expression > 0).sum(axis=0).ravel() > 0.01 * dataset.atac_expression.shape[0]
+    high_count_atacs = (dataset.atac_expression > 0).sum(axis=0).ravel() > 0.03 * dataset.atac_expression.shape[0]
     dataset.atac_expression = dataset.atac_expression[:, high_count_atacs]
     dataset.atac_names = dataset.atac_names[high_count_atacs]
-    '''
+
 
     high_gene_count_cells = (dataset.X > 0).sum(axis=1).ravel() > 50
     #high_atac_cells = dataset.atac_expression.sum(axis=1) >= np.percentile(dataset.atac_expression.sum(axis=1), 10)
@@ -111,24 +122,21 @@ pre_trainer = UnsupervisedTrainer(
 is_test_pragram = False
 if is_test_pragram:
     pre_trainer.train(n_epochs=n_epochs, lr=lr)
-    torch.save(pre_trainer.model.state_dict(), '%s/pre_trainer6.pkl' % save_path)
+    torch.save(pre_trainer.model.state_dict(), '%s/pre_trainer_varianceGene_1.pkl' % save_path)
 
-if os.path.isfile('%s/pre_trainer6.pkl' % save_path):
-    pre_trainer.model.load_state_dict(torch.load('%s/pre_trainer6.pkl' % save_path))
+if os.path.isfile('%s/pre_trainer_varianceGene_1.pkl' % save_path):
+    pre_trainer.model.load_state_dict(torch.load('%s/pre_trainer_varianceGene_1.pkl' % save_path))
     pre_trainer.model.eval()
 else:
     #pre_trainer.model.init_gmm_params(dataset)
     pre_trainer.train(n_epochs=n_epochs, lr=lr)
-    torch.save(pre_trainer.model.state_dict(), '%s/pre_trainer6.pkl' % save_path)
+    torch.save(pre_trainer.model.state_dict(), '%s/pre_trainer_varianceGene_1.pkl' % save_path)
 
 # pretrainer_posterior:
 full = pre_trainer.create_posterior(pre_trainer.model, dataset, indices=np.arange(len(dataset)))
 latent, batch_indices, labels = full.sequential().get_latent()
 batch_indices = batch_indices.ravel()
 imputed_values = full.sequential().imputation()
-
-df = pd.DataFrame(data=imputed_values.T, columns=dataset.barcodes, index=dataset.gene_names[:,0])
-df.to_csv(os.path.join(save_path,"gene_scvi_imputation.csv"))
 # visulization
 prior_adata = anndata.AnnData(X=dataset.X)
 prior_adata.obsm["X_multi_vi"] = latent
@@ -141,7 +149,7 @@ sc.pl.umap(prior_adata, color=["cell_type"], ax=ax, show=show_plot)
 # save data as csv file
 df = pd.DataFrame(data=prior_adata.obsm["X_umap"],  columns=["umap_dim1","umap_dim2"] , index=dataset.barcodes )
 df.insert(0,"labels",labels)
-df.to_csv(os.path.join(save_path,"scvi_umap.csv"))
+df.to_csv(os.path.join(save_path,"scvi_umap_varianceGene.csv"))
 
 sample_latents = torch.tensor([])
 samples = torch.tensor([])
@@ -175,7 +183,7 @@ sc.pl.umap(prior_adata, color=["cell_type"], ax=ax, show=show_plot)
 # save data as csv file
 df = pd.DataFrame(data=prior_adata.obsm["X_umap"],  columns=["umap_dim1","umap_dim2"] , index=dataset.barcodes[0:len(sample_latents)])
 df.insert(0,"labels",dataset.labels[0:len(sample_latents)])
-df.to_csv(os.path.join(save_path,"scvi_umap_imputation.csv"))
+df.to_csv(os.path.join(save_path,"scvi_umap_imputation_varianceGene.csv"))
 
 sample_latents = torch.tensor([])
 samples = torch.tensor([])
@@ -231,20 +239,20 @@ sc.pl.umap(prior_adata, color=['louvain'])
 is_test_pragram = False
 if is_test_pragram:
     trainer.train(n_epochs=n_epochs, lr=lr)
-    torch.save(trainer.model.state_dict(), '%s/multi_vae_21.pkl' % save_path)
+    torch.save(trainer.model.state_dict(), '%s/multi_vae_varianceGene_12.pkl' % save_path)
 
 #if os.path.isfile('%s/multi_vae_1.pkl' % save_path):
 #    trainer.model.load_state_dict(torch.load('%s/multi_vae_1.pkl' % save_path))
 #    trainer.model.eval()
-if os.path.isfile('%s/multi_vae_21.pkl' % save_path):
-    trainer.model.load_state_dict(torch.load('%s/multi_vae_21.pkl' % save_path))
+if os.path.isfile('%s/multi_vae_varianceGene_12.pkl' % save_path):
+    trainer.model.load_state_dict(torch.load('%s/multi_vae_varianceGene_12.pkl' % save_path))
     trainer.model.eval()
     #trainer.train(n_epochs=n_epochs, lr=lr)
     #torch.save(trainer.model.state_dict(), '%s/multi_vae_3.pkl' % save_path)
 else:
     #trainer.model.init_gmm_params(dataset)
     trainer.train(n_epochs=n_epochs, lr=lr)
-    torch.save(trainer.model.state_dict(), '%s/multi_vae_21.pkl' % save_path)
+    torch.save(trainer.model.state_dict(), '%s/multi_vae_varianceGene_12.pkl' % save_path)
 
 # Plotting the likelihood change across the 500 epochs of training: blue for training error and orange for testing error.**
 elbo_train_set = trainer.history["elbo_train_set"]
@@ -261,6 +269,15 @@ print(matplotlib.get_backend())
 full = trainer.create_posterior(trainer.model, dataset, indices=np.arange(len(dataset)),type_class=MultiPosterior)
 latent, latent_rna, latent_atac, cluster_gamma, cluster_index, batch_indices, labels = full.sequential().get_latent()
 batch_indices = batch_indices.ravel()
+
+prior_adata = anndata.AnnData(X=dataset.X)
+prior_adata.obsm["X_multi_vi"] = latent
+prior_adata.obs['cell_type'] = torch.tensor(labels)
+sc.pp.neighbors(prior_adata, use_rep="X_multi_vi", n_neighbors=15)
+sc.tl.umap(prior_adata, min_dist=0.1)
+matplotlib.use('TkAgg')
+fig, ax = plt.subplots(figsize=(7, 6))
+sc.pl.umap(prior_adata, color=["cell_type"], ax=ax, show=show_plot)
 
 #Similarly, it is possible to query the imputed values via the `imputation` method of the posterior object. **Note for advanced users:** imputation is an ambiguous term and there are two ways to perform imputation in scVI. The first way is to query the **mean of the negative binomial** distribution modeling the counts. This is referred to as `sample_rate` in the codebase and can be reached via the `imputation` method. The second is to query the **normalized mean of the same negative binomial** (please refer to the scVI manuscript). This is referred to as `sample_scale` in the codebase and can be reached via the `get_sample_scale` method. In differential expression for example, we of course rely on the normalized latent variable which is corrected for variations in sequencing depth.
 imputed_values = full.sequential().imputation()
@@ -332,10 +349,10 @@ is_tensor= False
 # save data as csv file
 df = pd.DataFrame(data=prior_adata.obsm["X_umap"],  columns=["umap_dim1","umap_dim2"] , index=dataset.barcodes[0:len(sample_labels)])
 df.insert(0,"labels",sample_labels)
-df.to_csv(os.path.join(save_path,"multivae_umap_imputation.csv"))
+df.to_csv(os.path.join(save_path,"multivae_umap_imputation_varianceGene.csv"))
 # save impute data
 df = pd.DataFrame(data=prior_adata.obsm["X_multi_vi"],  columns=["dim1","dim2","dim3","dim4","dim5","dim6","dim7","dim8","dim9","dim10"] , index=dataset.barcodes[0:len(sample_labels)])
-df.to_csv(os.path.join(save_path,"multivae_latent_imputation.csv"))
+df.to_csv(os.path.join(save_path,"multivae_latent_imputation_varianceGene.csv"))
 #diff gene analysis
 sc.tl.rank_genes_groups(prior_adata, 'louvain')
 sc.pl.rank_genes_groups(prior_adata, n_genes=10, sharey=False)
@@ -376,13 +393,13 @@ for i in range(len(diff_top_gene_set.dtype.descr)):
 diff_top_gene_unique = np.unique(diff_top_gene_matrix.flatten())
 # save diff atac matrix
 df = pd.DataFrame(data=diff_top_gene_matrix)
-df.to_csv(os.path.join(save_path,"gene_diff_matrix_adj.csv"))
+df.to_csv(os.path.join(save_path,"gene_diff_matrix_adj_varianceGene.csv"))
 df = pd.DataFrame(data=diff_top_gene_pvalue_matrix)
-df.to_csv(os.path.join(save_path,"gene_diff_pvalue_matrix_adj.csv"))
+df.to_csv(os.path.join(save_path,"gene_diff_pvalue_matrix_adj_varianceGene.csv"))
 df = pd.DataFrame(data=diff_top_gene_foldchange_matrix)
-df.to_csv(os.path.join(save_path,"gene_diff_foldchange_matrix_adj.csv"))
+df.to_csv(os.path.join(save_path,"gene_diff_foldchange_matrix_adj_varianceGene.csv"))
 df = pd.DataFrame(data=temp_rna.T, columns=dataset.barcodes, index=dataset.gene_names[:,0])
-df.to_csv(os.path.join(save_path,"gene_imputation.csv"))
+df.to_csv(os.path.join(save_path,"gene_imputation_varianceGene.csv"))
 #gene clustering
 gene_expression = temp_rna.T
 for i in range(len(gene_expression)):
@@ -425,7 +442,7 @@ sc.pl.umap(gene_exp_adata, color=['louvain'])
 
 df = pd.DataFrame(data=gene_exp_adata.obsm["X_umap"],  columns=["umap_dim1","umap_dim2"] , index=gene_exp_data.gene_name_formulation)
 df.insert(0,"gene_cluster",gene_exp_adata.obs['louvain'].as_matrix())
-df.to_csv(os.path.join(save_path,"gene_cluster_umap.csv"))
+df.to_csv(os.path.join(save_path,"gene_cluster_umap_varianceGene.csv"))
 
 
 
@@ -508,16 +525,16 @@ atac_diff_top_gene_matrix =atac_diff_top_gene_matrix[:,0:200]
 atac_diff_top_gene_unique = np.unique(atac_diff_top_gene_matrix.flatten())
 # save diff atac
 df = pd.DataFrame(data=atac_diff_clu_unique,  columns=["diffatac"] , index=atac_exp_data.atac_name_formulation[atac_diff_clu_unique])
-df.to_csv(os.path.join(save_path,"atac_diff_set.csv"))
+df.to_csv(os.path.join(save_path,"atac_diff_set_varianceGene.csv"))
 # save diff atac matrix
 df = pd.DataFrame(data=atac_diff_clu_matrix)
-df.to_csv(os.path.join(save_path,"atac_diff_matrix.csv"))
+df.to_csv(os.path.join(save_path,"atac_diff_matrix_varianceGene.csv"))
 df = pd.DataFrame(data=atac_diff_top_gene_pvalue_matrix)
-df.to_csv(os.path.join(save_path,"atac_diff_pvalue_matrix.csv"))
+df.to_csv(os.path.join(save_path,"atac_diff_pvalue_matrix_varianceGene.csv"))
 df = pd.DataFrame(data=atac_diff_top_gene_foldchange_matrix)
-df.to_csv(os.path.join(save_path,"atac_diff_foldchange_matrix.csv"))
+df.to_csv(os.path.join(save_path,"atac_diff_foldchange_matrix_varianceGene.csv"))
 df = pd.DataFrame(data=atac_exp_data.X, columns=atac_exp_data.cell_name_formulation, index=atac_exp_data.atac_name_formulation)
-df.to_csv(os.path.join(save_path,"atac_aggregation.csv"))
+df.to_csv(os.path.join(save_path,"atac_aggregation_varianceGene.csv"))
 
 
 
@@ -600,7 +617,7 @@ sc.pl.umap(atac_exp_adata, color=['louvain'])
 # save data as csv file
 df = pd.DataFrame(data=atac_exp_adata.obsm["X_umap"],  columns=["umap_dim1","umap_dim2"] , index=atac_exp_filter_data.atac_name_formulation)
 df.insert(0,"atac_cluster",atac_exp_adata.obs['louvain'].as_matrix())
-df.to_csv(os.path.join(save_path,"atac_cluster_umap.csv"))
+df.to_csv(os.path.join(save_path,"atac_cluster_umap_varianceGene.csv"))
 
 post_adata = anndata.AnnData(X=dataset.X)
 #post_adata = anndata.AnnData(X=dataset.atac_expression)
@@ -638,7 +655,7 @@ sc.pl.umap(post_adata, color=["cell_type"], ax=ax, show=show_plot)
 # save data as csv file
 df = pd.DataFrame(data=post_adata.obsm["X_umap"],  columns=["umap_dim1","umap_dim2"] , index=dataset.barcodes)
 df.insert(0,"labels",labels )
-df.to_csv(os.path.join(save_path,"multivae_umap.csv"))
+df.to_csv(os.path.join(save_path,"multivae_umap_varianceGene.csv"))
 
 # train set clustering
 sample_latents = torch.tensor([])

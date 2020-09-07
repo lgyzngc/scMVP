@@ -83,8 +83,11 @@ class UnsupervisedTrainer(Trainer):
 
     def loss(self, tensors):
         sample_batch, local_l_mean, local_l_var, batch_index, y = tensors
+        #reconst_loss, kl_divergence_local, kl_divergence_global = self.model(
+        #    sample_batch, local_l_mean, local_l_var, batch_index, y
+        #)
         reconst_loss, kl_divergence_local, kl_divergence_global = self.model(
-            sample_batch, local_l_mean, local_l_var, batch_index, y
+            sample_batch, local_l_mean, local_l_var, batch_index, batch_index
         )
         loss = (
             self.n_samples

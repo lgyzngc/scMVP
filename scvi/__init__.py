@@ -2,9 +2,9 @@
 
 """Top-level package for scVI-dev."""
 
-__author__ = "Romain Lopez"
-__email__ = "romain_lopez@berkeley.edu"
-__version__ = "0.5.0"
+__author__ = "Gaoyang Li"
+__email__ = "lgyzngc@tongji.edu.cn"
+__version__ = "0.1.0"
 
 # Set default logging handler to avoid logging with logging.lastResort logger.
 import logging

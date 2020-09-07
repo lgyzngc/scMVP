@@ -36,6 +36,14 @@ scvi.inference.jvae\_trainer module
     :undoc-members:
     :show-inheritance:
 
+scvi.inference.multi\_inference module
+-----------------------------------
+
+.. automodule:: scvi.inference.multi_inference
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 scvi.inference.posterior module
 -------------------------------
 

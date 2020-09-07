@@ -15,39 +15,46 @@ from scvi.dataset.dataset import CellMeasurement, GeneExpressionDataset, _downlo
 logger = logging.getLogger(__name__)
 available_datasets = {
         "CellLineMixture": [
-            "GSE126074_CellLineMixture_SNAREseq_cDNA.counts.tsv",
-            "GSE126074_CellLineMixture_SNAREseq_chromatin.counts.tsv",
+            "Cell_Mix_cell.tsv",
+            "Cell_Mix_gene.tsv",
+            "Cell_Mix_gene.count.mtx",
+            "Cell_Mix_cell.ATAC.tsv",
+            "Cell_Mix_peak.tsv",
+            "Cell_Mix_peak.count.mtx",
+            "Cell_Mix_embeddings.xls"
         ],
-        "AdBrainCortex": [
-            "GSE126074_AdBrainCortex_SNAREseq_cDNA.barcodes.tsv",
-            "GSE126074_AdBrainCortex_SNAREseq_cDNA.counts.mtx",
-            "GSE126074_AdBrainCortex_SNAREseq_cDNA.genes.tsv",
-            "GSE126074_AdBrainCortex_SNAREseq_chromatin.barcodes.tsv",
-            "GSE126074_AdBrainCortex_SNAREseq_chromatin.counts.mtx",
-            "GSE126074_AdBrainCortex_SNAREseq_chromatin.peaks.tsv",
+        "Adult_Cerebrail": [
+            "Adult_Cerebrail_Cortex_cell.tsv",
+            "Adult_Cerebrail_Cortex_gene.tsv",
+            "Adult_Cerebrail_Cortex_gene.count.mtx",
+            "Adult_Cerebrail_Cortex_cell.ATAC.tsv",
+            "Adult_Cerebrail_Cortex_peak.tsv",
+            "Adult_Cerebrail_Cortex_peak.count.mtx",
+            "Adult_Cerebrail_Cortex_embeddings.xls",
         ],
-        "P0_BrainCortex": [
-            "GSE126074_P0_BrainCortex_SNAREseq_cDNA.barcodes.tsv",
-            "GSE126074_P0_BrainCortex_SNAREseq_cDNA.counts.mtx",
-            "GSE126074_P0_BrainCortex_SNAREseq_cDNA.genes.tsv",
-            "GSE126074_P0_BrainCortex_SNAREseq_chromatin.barcodes.tsv",
-            "GSE126074_P0_BrainCortex_SNAREseq_chromatin.counts.mtx",
-            "GSE126074_P0_BrainCortex_SNAREseq_chromatin.peaks.tsv",
+        "Fetal_Forebrain": [
+            "Fetal_Forebrain_cell.tsv",
+            "Fetal_Forebrain_gene.tsv",
+            "Fetal_Forebrain_gene.count.mtx",
+            "Fetal_Forebrain_cell.ATAC.tsv",
+            "Fetal_Forebrain_peak.tsv",
+            "Fetal_Forebrain_peak.count.mtx",
+            "Forebrain_Forebrain_Embeddings.xls",
         ],
     }
 available_suffix = {
-    "cDNA.barcodes.tsv": "gene_barcodes",
-    "cDNA.counts.mtx": "gene_expression",
-    "cDNA.genes.tsv": "gene_names",
-    "chromatin.barcodes.tsv":"atac_barcodes",
-    "chromatin.counts.mtx":"atac_expression",
-    "chromatin.peaks.tsv":"atac_names",
-    "cDNA.counts.tsv": "gene_expression",
-    "chromatin.counts.tsv":"atac_expression",
+    "cell.tsv": "gene_barcodes",
+    "gene.count.mtx": "gene_expression",
+    "gene.tsv": "gene_names",
+    "cell.ATAC.tsv":"atac_barcodes",
+    "peak.count.mtx":"atac_expression",
+    "peak.tsv":"atac_names",
+    "embeddings.xls":"label_annotation",
+    "Embeddings.xls":"label_annotation",
 }
 available_specification = ["filtered", "raw"]
 
-class snareDataset(GeneExpressionDataset):
+class pairedSeqDataset(GeneExpressionDataset):
     """Loads a file from `10x`_ website.
 
     :param dataset_name: Name of the dataset file. Has to be one of:
@@ -64,7 +71,7 @@ class snareDataset(GeneExpressionDataset):
     :param delayed_populating: Whether to populate dataset with a delay
 
     Examples:
-        >>> tenX_dataset = snare("P0_BrainCortex")
+        >>> tenX_dataset = scienceDataset("CellLineMixture")
 
     .. _10x:
         http://cf.10xgenomics.com/
@@ -74,7 +81,7 @@ class snareDataset(GeneExpressionDataset):
     def __init__(
         self,
         dataset_name: str = None,
-        save_path: str = "E:/data/qiliu/single-cell program/ATAC/snare data/",
+        save_path: str = "E:/data/qiliu/single-cell program/ATAC/paired seq/",
         type: str = "filtered",
         dense: bool = False,
         measurement_names_column: int = 0,
@@ -122,9 +129,13 @@ class snareDataset(GeneExpressionDataset):
             elif not self.dense and file_path.split("_")[-1].split(".")[-1] == "mtx":
                 data_dict[available_suffix[file_path.split("_")[-1]]] = csr_matrix(sp_io.mmread(file_path).T)
             else:
-                if len(self.save_path_list) == 2:
-                    data_dict[available_suffix[file_path.split("_")[-1]]] = pd.read_csv(file_path, sep="\t",
-                                                                                        header=0, index_col=0)
+                if file_path.split(".")[-1] == "xls":
+                    data_dict[available_suffix[file_path.split("_")[-1]]] = pd.read_csv(file_path,
+                                                                                        #header = 0,
+                                                                                        sep="\t",
+                                                                                        na_values = "NA",
+                                                                                        #usecols=[0, 1, 2, 5]
+                                                                                        )
                 else:
                     data_dict[available_suffix[file_path.split("_")[-1]]] = pd.read_csv(file_path, sep="\t", header=None)
 
@@ -138,60 +149,123 @@ class snareDataset(GeneExpressionDataset):
             data_dict["atac_barcodes"] = pd.DataFrame(temp.columns.values)
             data_dict["atac_names"] = pd.DataFrame(temp._stat_axis.values)
             data_dict["atac_expression"] = np.array(temp).T
-
+        else:
+            temp = data_dict["gene_names"]
+            data_dict["gene_names"] = temp[0]
+            temp = data_dict["atac_names"]
+            data_dict["atac_names"] = temp[0]
+            temp = data_dict["label_annotation"]
+            if "ID" in temp.columns.values.tolist():
+                data_dict["cell_ID"] = temp['ID']
+            else:
+                raise ValueError("cell ID cann't be empty!"
+                                 )
+            if "DNA_Cluster" in temp.columns.values.tolist():
+                data_dict["DNA_Cluster"] = temp['DNA_Cluster']
+            if "RNA_Cluster" in temp.columns.values.tolist():
+                data_dict["RNA_Cluster"] = temp['RNA_Cluster']
+            if "Ident" in temp.columns.values.tolist():
+                data_dict["label"] = temp['Ident']
+            elif "Cluster" in temp.columns.values.tolist():
+                data_dict["label"] = temp['Cluster']
+            else:
+                raise ValueError("cell label cann't be empty!"
+                                 )
 
 
         #gene_barcode_index = np.array(data_dict["gene_barcodes"]).argsort()
         #gene_barcode_index = data_dict["gene_barcodes"].sort_values(by = ["0"],axis = 0).index.tolist()
-        gene_barcode_index = data_dict["gene_barcodes"].values.tolist()
-        gene_barcode_index = sorted(range(len(gene_barcode_index)),key = lambda k:gene_barcode_index[k])
+        xy, gene_barcode_index, atac_barcode_index = np.intersect1d(data_dict["gene_barcodes"].values,
+                                                                    data_dict["atac_barcodes"].values,
+                                                                    return_indices=True)
+        xyz, gene_atac_xy_index, cell_index = np.intersect1d(xy,
+                                                             data_dict["cell_ID"].values,
+                                                             return_indices=True)
+        gene_barcode_index = gene_barcode_index[gene_atac_xy_index]
+        atac_barcode_index = atac_barcode_index[gene_atac_xy_index]
+        #gene_barcode_index = data_dict["gene_barcodes"].values.tolist()
+        #gene_barcode_index = sorted(range(len(gene_barcode_index)),key = lambda k:gene_barcode_index[k])
         #gene_barcode_index = data_dict["gene_barcodes"].values.tolist().index(gene_barcode_index)
         temp = data_dict["gene_barcodes"]
-        data_dict["gene_barcodes"] = temp.loc[gene_barcode_index,:]
+        data_dict["gene_barcodes"] = temp.loc[gene_barcode_index]
         temp = data_dict["gene_expression"]
         if issparse(temp):
             data_dict["gene_expression"] = temp[gene_barcode_index,:].A
         else:
             data_dict["gene_expression"] = temp[gene_barcode_index, :]
 
+        #cell type label permutation
+        temp = data_dict["cell_ID"]
+        data_dict["cell_ID"] = temp[cell_index]
+        temp = data_dict["label"]
+        data_dict["label"] = temp[cell_index]
+        if "DNA_Cluster" in data_dict.keys():
+            temp = data_dict["DNA_Cluster"]
+            data_dict["DNA_Cluster"] = temp[cell_index]
+        if "RNA_Cluster" in data_dict.keys():
+            temp = data_dict["RNA_Cluster"]
+            data_dict["RNA_Cluster"] = temp[cell_index]
 
-        atac_barcode_index = data_dict["atac_barcodes"].values.tolist()
-        atac_barcode_index = sorted(range(len(atac_barcode_index)), key=lambda k: atac_barcode_index[k])
+
+        #atac_barcode_index = data_dict["atac_barcodes"].values.tolist()
+        #atac_barcode_index = sorted(range(len(atac_barcode_index)), key=lambda k: atac_barcode_index[k])
         temp = data_dict["atac_barcodes"]
-        data_dict["atac_barcodes"] = temp.loc[atac_barcode_index,:]
+        data_dict["atac_barcodes"] = temp.loc[atac_barcode_index]
         temp = data_dict["atac_expression"]
         data_dict["atac_expression"] = temp[atac_barcode_index, :]
 
-        #if issparse(temp):
-        #    data_dict["atac_expression"] = temp[atac_barcode_index, :].A
-        #else:
-        #    data_dict["atac_expression"] = temp[atac_barcode_index, :]
-        # filter the atac data
+
+        # cell filter for trainer6.pkl
+        high_gene_count_cells = (data_dict["atac_expression"]).sum(axis=1).ravel() + \
+                                (data_dict["gene_expression"]).sum(axis=1).ravel() > 750
+        high_atac_count_cells = (data_dict["gene_expression"]).sum(axis=1).ravel() +\
+                                (data_dict["atac_expression"]).sum(axis=1).ravel() > 750
+        inds_to_keep = np.logical_and(high_gene_count_cells, high_atac_count_cells)
+        inds_to_keep = inds_to_keep.A
+        inds_to_keep = inds_to_keep[0]
+        temp = data_dict["gene_expression"]
+        data_dict["gene_expression"] = temp[inds_to_keep,:]
+        temp = data_dict["gene_barcodes"]
+        data_dict["gene_barcodes"] = temp.loc[inds_to_keep]
         temp = data_dict["atac_expression"]
+        data_dict["atac_expression"] = temp[inds_to_keep, :]
+        temp = data_dict["atac_barcodes"]
+        data_dict["atac_barcodes"] = temp.loc[inds_to_keep]
+        temp = data_dict["cell_ID"]
+        data_dict["cell_ID"] = temp[inds_to_keep]
+        temp = data_dict["label"]
+        data_dict["label"] = temp[inds_to_keep]
+        temp = data_dict["DNA_Cluster"]
+        data_dict["DNA_Cluster"] = temp[inds_to_keep]
+        temp = data_dict["RNA_Cluster"]
+        data_dict["RNA_Cluster"] = temp[inds_to_keep]
+
+        #temp = data_dict["atac_expression"]
         # for binary distribution
+        temp = data_dict["atac_expression"]
         if self.is_binary:
             temp_index = temp > 1
             temp[temp_index] = 1
         # end binary
-        high_count_atacs = ((temp > 0).sum(axis=0).ravel() >= 0.005 * temp.shape[0])\
-                            & ((temp > 0).sum(axis=0).ravel() <= 0.1 * temp.shape[0])
-        #high_count_atacs = ((temp > 0).sum(axis=0).ravel() >= 0.19 * temp.shape[0])
-
-
+        #high_count_atacs = ((temp > 0).sum(axis=0).ravel() >= 0.001 * temp.shape[0])\
+        #                    & ((temp > 0).sum(axis=0).ravel() <= 0.1 * temp.shape[0])
+        #high_count_atacs = ((temp > 0).sum(axis=0).ravel() >= 0.003 * temp.shape[0]) \
+        #                   & ((temp > 0).sum(axis=0).ravel() <= 0.1 * temp.shape[0])
+        high_count_atacs = ((temp > 0).sum(axis=0).ravel() >= 0.007 * temp.shape[0])
+        #high_count_atacs = ((temp > 0).sum(axis=0).ravel() >= 0.005 * temp.shape[0])
 
         if issparse(temp):
             high_count_atacs_index = np.where(high_count_atacs)
             temp = temp[:, high_count_atacs_index[1]]
             data_dict["atac_expression"] = temp.A
-            data_dict["atac_names"] = data_dict["atac_names"].loc[high_count_atacs_index[1], :]
+            data_dict["atac_names"] = data_dict["atac_names"].loc[high_count_atacs_index[1]]
         else:
             temp = temp[:, high_count_atacs]
             data_dict["atac_expression"] = temp
             data_dict["atac_names"] = data_dict["atac_names"].loc[high_count_atacs, :]
-            print(len(temp[temp > 1]))
-            print(len(temp[temp < 0]))
         #data_dict["atac_expression"] = temp
         #data_dict["atac_names"] = data_dict["atac_names"].loc[high_count_atacs,:]
+
 
         '''
         # ATAC-seq as the key
@@ -219,7 +293,17 @@ class snareDataset(GeneExpressionDataset):
         )
         self.filter_cells_by_count(datatype=self.datatype)
         '''
-         # RNA-seq as the key
+        # RNA-seq as the key
+        label = np.zeros(len(data_dict["cell_ID"].values))
+        if "label" in data_dict.keys():
+            temp = data_dict["label"].values.tolist()
+            temp1 = dict(zip(temp, range(len(temp))))
+            for i, key in zip(range(len(temp1)), temp1.keys()):
+                temp1[key] = i
+            for i, el in zip(range(len(temp)), temp):
+                label[i] = temp1[el]
+        data_dict["label"] = label
+
         Ys = []
         measurement = CellMeasurement(
             name="atac_expression",
@@ -228,6 +312,23 @@ class snareDataset(GeneExpressionDataset):
             columns=data_dict["atac_names"].astype(np.str),
         )
         Ys.append(measurement)
+        if "RNA_Cluster" in data_dict.keys():
+            RNA_cluster_label = CellMeasurement(
+                name="RNA_cluster_label",
+                data=data_dict["RNA_Cluster"],
+                columns_attr_name="cell_names",
+                columns=data_dict["cell_ID"].astype(np.str),
+            )
+            Ys.append(RNA_cluster_label)
+
+        if "DNA_Cluster" in data_dict.keys():
+            DNA_cluster_label = CellMeasurement(
+                name="DNA_cluster_label",
+                data=data_dict["DNA_Cluster"],
+                columns_attr_name="cell_names",
+                columns=data_dict["cell_ID"].astype(np.str),
+            )
+            Ys.append(DNA_cluster_label)
 
         cell_attributes_dict = {
             "barcodes": np.squeeze(np.asarray(data_dict["gene_barcodes"], dtype=str))
@@ -241,6 +342,8 @@ class snareDataset(GeneExpressionDataset):
             gene_names=data_dict["gene_names"].astype(np.str),
             cell_attributes_dict=cell_attributes_dict,
             Ys=Ys,
+            labels = data_dict["label"],
+            remap_attributes = False
         )
         self.filter_cells_by_count(datatype = self.datatype)
 

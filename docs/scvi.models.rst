@@ -44,6 +44,14 @@ scvi.models.modules module
     :undoc-members:
     :show-inheritance:
 
+scvi.models.multi\_vae module
+--------------------------
+
+.. automodule:: scvi.models.multi_vae
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 scvi.models.scanvi module
 -------------------------
 

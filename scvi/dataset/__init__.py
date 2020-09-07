@@ -1,4 +1,5 @@
 from scvi.dataset.anndataset import AnnDatasetFromAnnData, DownloadableAnnDataset
+from scvi.dataset.ATACDataset import ATACDataset
 from scvi.dataset.brain_large import BrainLargeDataset
 from scvi.dataset.cite_seq import CiteSeqDataset, CbmcDataset
 from scvi.dataset.cortex import CortexDataset
@@ -9,6 +10,7 @@ from scvi.dataset.dataset import (
     CellMeasurement,
 )
 from scvi.dataset.dataset10X import Dataset10X, BrainSmallDataset
+from scvi.dataset.geneDataset import geneDataset
 from scvi.dataset.hemato import HematoDataset
 from scvi.dataset.loom import (
     LoomDataset,
@@ -17,6 +19,7 @@ from scvi.dataset.loom import (
     FrontalCortexDropseqDataset,
 )
 from scvi.dataset.pbmc import PbmcDataset, PurifiedPBMCDataset
+from scvi.dataset.pairedSeqDataset import pairedSeqDataset
 from scvi.dataset.seqfish import SeqfishDataset
 from scvi.dataset.seqfishplus import SeqFishPlusDataset
 from scvi.dataset.smfish import SmfishDataset
@@ -32,6 +35,7 @@ from scvi.dataset.synthetic import (
 
 __all__ = [
     "AnnDatasetFromAnnData",
+    "ATACDataset",
     "DownloadableAnnDataset",
     "BrainLargeDataset",
     "CiteSeqDataset",
@@ -45,10 +49,12 @@ __all__ = [
     "DownloadableDataset",
     "Dataset10X",
     "BrainSmallDataset",
+    "geneDataset",
     "HematoDataset",
     "LoomDataset",
     "RetinaDataset",
     "FrontalCortexDropseqDataset",
+    "pairedSeqDataset",
     "PreFrontalCortexStarmapDataset",
     "PbmcDataset",
     "PurifiedPBMCDataset",

@@ -12,6 +12,14 @@ scvi.dataset.anndataset module
     :undoc-members:
     :show-inheritance:
 
+scvi.dataset.ATACDataset module
+------------------------------
+
+.. automodule:: scvi.dataset.ATACDataset
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 scvi.dataset.brain\_large module
 --------------------------------
 
@@ -60,6 +68,14 @@ scvi.dataset.dataset10X module
     :undoc-members:
     :show-inheritance:
 
+scvi.dataset.geneDataset module
+------------------------------
+
+.. automodule:: scvi.dataset.geneDataset
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 scvi.dataset.hemato module
 --------------------------
 
@@ -72,6 +88,14 @@ scvi.dataset.loom module
 ------------------------
 
 .. automodule:: scvi.dataset.loom
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+scvi.dataset.pairedSeqDataset module
+------------------------
+
+.. automodule:: scvi.dataset.pairedSeqDataset
     :members:
     :undoc-members:
     :show-inheritance:
@@ -104,6 +128,14 @@ scvi.dataset.smfish module
 --------------------------
 
 .. automodule:: scvi.dataset.smfish
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+scvi.dataset.snareDataset module
+--------------------------
+
+.. automodule:: scvi.dataset.snareDataset
     :members:
     :undoc-members:
     :show-inheritance:

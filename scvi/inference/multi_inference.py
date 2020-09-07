@@ -65,14 +65,15 @@ class MultiPosterior(Posterior):
             use_cuda=use_cuda,
             data_loader_kwargs=data_loader_kwargs,
         )
-        # Add protein tensor as another tensor to be loaded
+        # Add atac tensor as another tensor to be loaded
         self.data_loader_kwargs.update(
             {
                 "collate_fn": gene_dataset.collate_fn_builder(
-                    {"atac_expression": np.float32}
+                    {"atac_expression": np.float32}# debug cell index
                 )
             }
         )
+
         self.data_loader = DataLoader(gene_dataset, **self.data_loader_kwargs)
 
     def corrupted(self):
@@ -291,7 +292,7 @@ class MultiPosterior(Posterior):
             sample_batch_rna, local_l_mean, local_l_var, batch_index, label, sample_batch_atac = tensors
             give_mean = not sample
             latent_temp = self.model.sample_from_posterior_z(
-                [sample_batch_rna, sample_batch_atac], give_mean=give_mean
+                [sample_batch_rna, sample_batch_atac], y=label, give_mean=give_mean
             )
             latent += [
                 latent_temp[0][0]
@@ -409,6 +410,7 @@ class MultiPosterior(Posterior):
         imputed_rna_list = []
         imputed_atac_list = []
         label_list = []  # for the annotated data
+        atac_list = []
         for tensors in self:
             x_rna, _, _, batch_index, label, x_atac = tensors
             p_rna_rate, p_atac_rate = self.model.get_sample_rate(
@@ -417,10 +419,12 @@ class MultiPosterior(Posterior):
             imputed_rna_list += [np.array(p_rna_rate.cpu())]
             imputed_atac_list += [np.array(p_atac_rate.cpu())]
             label_list += [np.array(label.cpu())] # only for annotated data
+            atac_list += [np.array(x_atac.cpu())] # for the bins without call peak
         imputed_rna_list = np.concatenate(imputed_rna_list)
         imputed_atac_list = np.concatenate(imputed_atac_list)
         label_list = np.concatenate(label_list) # only for annotated data
-        return imputed_rna_list.squeeze(), imputed_atac_list.squeeze(), label_list.squeeze()
+        atac_list = np.concatenate(atac_list)# for the bins without call peak
+        return imputed_rna_list.squeeze(), imputed_atac_list.squeeze(), label_list.squeeze(), atac_list
 
     @torch.no_grad()
     def get_sample_scale(self):
@@ -518,8 +522,11 @@ class MultiTrainer(UnsupervisedTrainer):
             sample_batch_Y,
         ) = tensors
 
+        #reconst_loss, kl_divergence_local, kl_divergence_global = self.model(
+        #    sample_batch_X, sample_batch_Y, local_l_mean, local_l_var, batch_index, label
+        #)
         reconst_loss, kl_divergence_local, kl_divergence_global = self.model(
-            sample_batch_X, sample_batch_Y, local_l_mean, local_l_var, batch_index, label
+            sample_batch_X, sample_batch_Y, local_l_mean, local_l_var, batch_index, batch_index
         )
         loss = (
             self.n_samples
