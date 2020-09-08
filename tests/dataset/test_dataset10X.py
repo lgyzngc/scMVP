@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from scvi.dataset.dataset10X import Dataset10X, BrainSmallDataset
+from scMVP.dataset.dataset10X import Dataset10X, BrainSmallDataset
 from .utils import unsupervised_training_one_epoch
 
 

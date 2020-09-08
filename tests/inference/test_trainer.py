@@ -1,8 +1,8 @@
 from unittest import TestCase
 import numpy as np
-from scvi.dataset import GeneExpressionDataset, CellMeasurement
-from scvi.inference import UnsupervisedTrainer, JVAETrainer, TotalTrainer
-from scvi.models import VAE, JVAE, TOTALVI, Classifier
+from scMVP.dataset import GeneExpressionDataset, CellMeasurement
+from scMVP.inference import UnsupervisedTrainer, JVAETrainer, TotalTrainer
+from scMVP.models import VAE, JVAE, TOTALVI, Classifier
 
 
 class TestTrainer(TestCase):

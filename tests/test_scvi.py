@@ -1,7 +1,7 @@
 import numpy as np
 
-from scvi.dataset import CortexDataset, SyntheticDataset
-from scvi.inference import (
+from scMVP.dataset import CortexDataset, SyntheticDataset
+from scMVP.inference import (
     JointSemiSupervisedTrainer,
     AlternateSemiSupervisedTrainer,
     ClassifierTrainer,
@@ -9,9 +9,9 @@ from scvi.inference import (
     AdapterTrainer,
     TotalTrainer,
 )
-from scvi.inference.annotation import compute_accuracy_rf, compute_accuracy_svc
-from scvi.models import VAE, SCANVI, VAEC, LDVAE, TOTALVI, AutoZIVAE
-from scvi.models.classifier import Classifier
+from scMVP.inference.annotation import compute_accuracy_rf, compute_accuracy_svc
+from scMVP.models import VAE, SCANVI, VAEC, LDVAE, TOTALVI, AutoZIVAE
+from scMVP.models.classifier import Classifier
 
 use_cuda = True
 

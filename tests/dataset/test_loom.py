@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from scvi.dataset import (
+from scMVP.dataset import (
     LoomDataset,
     RetinaDataset,
     PreFrontalCortexStarmapDataset,

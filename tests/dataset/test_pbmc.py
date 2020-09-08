@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from scvi.dataset import PbmcDataset, PurifiedPBMCDataset
+from scMVP.dataset import PbmcDataset, PurifiedPBMCDataset
 from .utils import unsupervised_training_one_epoch
 
 

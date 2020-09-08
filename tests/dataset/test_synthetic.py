@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import numpy as np
 
-from scvi.dataset import (
+from scMVP.dataset import (
     SyntheticDataset,
     SyntheticRandomDataset,
     SyntheticDatasetCorr,

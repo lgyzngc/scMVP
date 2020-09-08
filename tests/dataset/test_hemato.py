@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from scvi.dataset import HematoDataset
+from scMVP.dataset import HematoDataset
 from .utils import unsupervised_training_one_epoch
 
 

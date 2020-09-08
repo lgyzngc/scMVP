@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from scvi.dataset import CortexDataset
+from scMVP.dataset import CortexDataset
 from .utils import unsupervised_training_one_epoch
 import numpy as np
 

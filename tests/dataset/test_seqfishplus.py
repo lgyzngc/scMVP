@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from scvi.dataset import SeqFishPlusDataset
+from scMVP.dataset import SeqFishPlusDataset
 from .utils import unsupervised_training_one_epoch
 
 

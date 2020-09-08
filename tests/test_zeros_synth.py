@@ -2,9 +2,9 @@ import numpy as np
 import torch
 import os
 
-from scvi.models import VAE
-from scvi.inference import UnsupervisedTrainer
-from scvi.dataset.synthetic import ZISyntheticDatasetCorr
+from scMVP.models import VAE
+from scMVP.inference import UnsupervisedTrainer
+from scMVP.dataset.synthetic import ZISyntheticDatasetCorr
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import seaborn as sns

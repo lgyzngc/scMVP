@@ -2,8 +2,8 @@ from unittest import TestCase
 
 import numpy as np
 
-from scvi.dataset import CortexDataset, GeneExpressionDataset
-from scvi.dataset.dataset import remap_categories, CellMeasurement
+from scMVP.dataset import CortexDataset, GeneExpressionDataset
+from scMVP.dataset.dataset import remap_categories, CellMeasurement
 
 
 class TestGeneExpressionDataset(TestCase):

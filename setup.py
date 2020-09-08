@@ -3,11 +3,6 @@
 
 from setuptools import setup, find_packages
 
-with open("README.rst") as readme_file:
-    readme = readme_file.read()
-
-with open("HISTORY.rst") as history_file:
-    history = history_file.read()
 
 requirements = [
     "numpy>=1.16.2",
@@ -19,10 +14,10 @@ requirements = [
     "loompy>=2.0.16",
     "tqdm>=4.31.1",
     "xlrd>=1.2.0",
-    "nbconvert>=5.4.0",
-    "nbformat>=4.4.0",
-    "jupyter>=1.0.0",
-    "ipython>=7.1.1",
+    "nbconvert>=5.4.0", #
+    "nbformat>=4.4.0", #
+    "jupyter>=1.0.0", #  setup crashed
+    "ipython>=7.1.1", #
     "numba==0.45.0",  # numba 0.45.1 has a conflict with UMAP and numba 0.46.0 with parallelization in loompy
     "hyperopt==0.1.2",
 ]
@@ -58,16 +53,7 @@ extras_requirements = {
     "test": test_requirements,
 }
 author = (
-    "Romain Lopez, "
-    "Jeffrey Regier, "
-    "Maxime Langevin, "
-    "Edouard Mehlman, "
-    "Yining Liu, "
-    "Achille Nazaret, "
-    "Gabriel Misrachi, "
-    "Oscar Clivio, "
-    "Pierre Boyeau, "
-    "Adam Gayoso"
+    "Gao yang Li, "
 )
 
 setup(
@@ -89,14 +75,14 @@ setup(
     license="MIT license",
     long_description=readme + "\n\n" + history,
     include_package_data=True,
-    keywords="scvi",
-    name="scvi",
+    keywords="scMVP",
+    name="scMVP",
     packages=find_packages(),
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,
     extras_require=extras_requirements,
-    url="https://github.com/YosefLab/scVI",
+    url="https://github.com/lgyzngc/sctest",
     version="0.5.0",
     zip_safe=False,
 )

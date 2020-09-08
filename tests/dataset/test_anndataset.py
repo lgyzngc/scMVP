@@ -3,7 +3,7 @@ from unittest import TestCase
 import anndata
 import numpy as np
 
-from scvi.dataset import AnnDatasetFromAnnData, DownloadableAnnDataset
+from scMVP.dataset import AnnDatasetFromAnnData, DownloadableAnnDataset
 from .utils import unsupervised_training_one_epoch
 
 

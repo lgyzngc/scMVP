@@ -8,13 +8,13 @@ import random
 #pygui(True)
 #mpl.use('WX')
 import matplotlib.pyplot as plt
-from scvi.dataset import CortexDataset, snareDataset, scienceDataset, ATACDataset, geneDataset
-from scvi.models import VAE
-from scvi.inference import UnsupervisedTrainer
-from scvi.inference import MultiPosterior, MultiTrainer
+from scMVP.dataset import CortexDataset, snareDataset, scienceDataset, ATACDataset, geneDataset
+from scMVP.models import VAE
+from scMVP.inference import UnsupervisedTrainer
+from scMVP.inference import MultiPosterior, MultiTrainer
 import torch
 
-from scvi.models.multi_vae import Multi_VAE
+from scMVP.models.multi_vae import Multi_VAE
 
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.model_selection import train_test_split

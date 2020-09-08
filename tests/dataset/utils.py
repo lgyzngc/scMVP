@@ -1,8 +1,8 @@
 import torch
 
-from scvi.dataset import GeneExpressionDataset
-from scvi.inference import UnsupervisedTrainer
-from scvi.models import VAE
+from scMVP.dataset import GeneExpressionDataset
+from scMVP.inference import UnsupervisedTrainer
+from scMVP.models import VAE
 
 use_cuda = torch.cuda.is_available()
 

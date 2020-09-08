@@ -13,10 +13,10 @@ import torch
 from colour import Color
 from hyperopt import STATUS_OK
 from hyperopt import Trials
-from scvi.inference import SemiSupervisedTrainer
-from scvi.inference import UnsupervisedTrainer
-from scvi.models import SCANVI
-from scvi.models import VAE
+from scMVP.inference import SemiSupervisedTrainer
+from scMVP.inference import UnsupervisedTrainer
+from scMVP.models import SCANVI
+from scMVP.models import VAE
 from sklearn.model_selection import train_test_split
 
 
