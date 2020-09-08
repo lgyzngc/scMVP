@@ -2,7 +2,7 @@ import logging
 from typing import Union
 
 logger = logging.getLogger(__name__)
-scvi_logger = logging.getLogger("scvi")
+scMVP_logger = logging.getLogger("scMVP")
 
 autotune_formatter = logging.Formatter(
     "[%(asctime)s - %(processName)s - %(threadName)s] %(levelname)s - %(name)s\n%(message)s"
@@ -40,9 +40,9 @@ def set_verbosity(level: Union[str, int]):
     If "scvi" logger has no StreamHandler, add one.
     Else, set its level to `level`.
     """
-    scvi_logger.setLevel(level)
+    scMVP_logger.setLevel(level)
     has_streamhandler = False
-    for handler in scvi_logger.handlers:
+    for handler in scMVP_logger.handlers:
         if isinstance(handler, logging.StreamHandler):
             handler.setLevel(level)
             logger.info(
@@ -59,5 +59,5 @@ def set_verbosity(level: Union[str, int]):
         ch.setFormatter(
             DispatchingFormatter(formatter, {"scvi.autotune": autotune_formatter})
         )
-        scvi_logger.addHandler(ch)
+        scMVP_logger.addHandler(ch)
         logger.info("Added StreamHandler with custom formatter to 'scvi' logger.")

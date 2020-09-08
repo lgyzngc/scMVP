@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Top-level package for scVI-dev."""
+
 
 __author__ = "Gaoyang Li"
 __email__ = "lgyzngc@tongji.edu.cn"
@@ -15,7 +15,7 @@ from ._settings import set_verbosity
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
 
-# default to INFO level logging for the scvi package
+# default to INFO level logging for the scMVP package
 set_verbosity(logging.INFO)
 
 __all__ = ["set_verbosity"]
