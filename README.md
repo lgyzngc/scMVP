@@ -21,8 +21,16 @@ python setup.py install
 
 Try ```import scMVP``` in your python console and start your first [**tutorial**](demos/scMVP_tutorial.ipynb) with scMVP!
 
-### Basic usage
+### User tutorial
 
+1. Using scMVP for sci-CAR cell line mixture. [demo](demos/scMVP_tutorial.ipynb)
+- Basic analysis modules with multi-VAE.
+
+2. Using scMVP for snare-seq mouse cerebral cortex P0 dataset.[demo](demos/scMVP_regress_tutorial.ipynb)
+- Perform CRE-gene analysis with PLS-regression.
+
+3. Using scMVP on customize joint profiling dataset.[demo]
+- Load and analyze your own data.
 
 ### Reference
 scMVP: an integrative generative model for joint profiling of single cell RNA-seq and ATAC-seq data. 2020
