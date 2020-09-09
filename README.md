@@ -8,7 +8,7 @@ with multi-modal VAE model.
 scMVP requires Python3.7.x and [**Pytorch**](http://pytorch.org).<br>
 For example, use [**miniconda**](https://conda.io/miniconda.html) to install python and pytorch of CPU or GPU version.
 ```Bash
-conda install -c pytorch python3.7 pytorch
+conda install -c pytorch python=3.7 pytorch
 ```
 
 Then you can install scMVP from github repo:<br>
