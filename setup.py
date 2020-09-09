@@ -3,11 +3,6 @@
 
 from setuptools import setup, find_packages
 
-with open("README.rst") as readme_file:
-    readme = readme_file.read()
-
-with open("HISTORY.rst") as history_file:
-    history = history_file.read()
 
 requirements = [
     "numpy>=1.16.2",
@@ -42,7 +37,6 @@ extras_requirements = {
     "notebooks": [
         "scanpy>=1.4",
         "louvain>=0.6.1",
-        "leidenalg>=0.7.0",
         "python-igraph>=0.7.1.post6",
         "colour>=0.1.5",
         "umap-learn>=0.3.8",
@@ -58,16 +52,7 @@ extras_requirements = {
     "test": test_requirements,
 }
 author = (
-    "Romain Lopez, "
-    "Jeffrey Regier, "
-    "Maxime Langevin, "
-    "Edouard Mehlman, "
-    "Yining Liu, "
-    "Achille Nazaret, "
-    "Gabriel Misrachi, "
-    "Oscar Clivio, "
-    "Pierre Boyeau, "
-    "Adam Gayoso"
+    "Gao yang Li, "
 )
 
 setup(
@@ -85,18 +70,18 @@ setup(
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
     description="Single-cell Variational Inference",
-    install_requires=requirements,
+    install_requires=requirements+extras_requirements["notebooks"],
     license="MIT license",
-    long_description=readme + "\n\n" + history,
+    # long_description=readme + "\n\n" + history,
     include_package_data=True,
-    keywords="scvi",
-    name="scvi",
+    keywords="scMVP",
+    name="scMVP",
     packages=find_packages(),
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,
     extras_require=extras_requirements,
-    url="https://github.com/YosefLab/scVI",
-    version="0.5.0",
+    url="https://github.com/bm2-lab/scMVP",
+    version="0.0.1",
     zip_safe=False,
 )
