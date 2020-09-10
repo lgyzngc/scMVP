@@ -18,7 +18,7 @@ requirements = [
     # "jupyter>=1.0.0",
     # "ipython>=7.1.1",
     "scikit-learn==0.22.2",
-    "numba==0.46.0",  # numba 0.45.1 has a conflict with UMAP and numba 0.46.0 with parallelization in loompy
+    "numba==0.47.0",  # numba 0.45.1 has a conflict with UMAP and numba 0.46.0 with parallelization in loompy
     "hyperopt==0.1.2",
 ]
 
