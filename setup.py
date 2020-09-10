@@ -8,7 +8,6 @@ requirements = [
     "numpy>=1.16.2",
     "torch>=1.0.1",
     "matplotlib>=3.0.3",
-    "scikit-learn>=0.20.3",
     "h5py>=2.9.0",
     "pandas>=0.24.2",
     "loompy>=2.0.16",
@@ -18,6 +17,7 @@ requirements = [
     # "nbformat>=4.4.0",
     # "jupyter>=1.0.0",
     # "ipython>=7.1.1",
+    "scikit-learn==0.22.2",
     "numba==0.45.0",  # numba 0.45.1 has a conflict with UMAP and numba 0.46.0 with parallelization in loompy
     "hyperopt==0.1.2",
 ]
