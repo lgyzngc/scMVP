@@ -23,6 +23,19 @@ python setup.py install
 
 Try ```import scMVP``` in your python console and start your first [**tutorial**](demos/scMVP_tutorial.ipynb) with scMVP!
 
+## Data preparation
+Your should first renaming your input files as followings:
+
+1. "XX_cell.tsv": cell barcodes of RNA <br>
+2. "XX_gene.count.mtx" or  "XX_gene.count.tsv": gene expression matrix <br>
+3. "XX_cDNA.genes.tsv": gene names <br>
+4. "XX_cell.ATAC.tsv": cell barcodes of ATAC <br>
+5. "XX_chromatin.counts.mtx": gene expression matrix  <br>
+6. "XX_peak.tsv": peak names/ids <br>
+
+**Optional:**<br>
+-  "XX_embeddings.xls": given cell annotation labels. <br>
+
 ## User tutorial
 
 1. Using scMVP for sci-CAR cell line mixture. [**demo**](demos/scMVP_tutorial.ipynb)
@@ -33,6 +46,7 @@ Try ```import scMVP``` in your python console and start your first [**tutorial**
 
 3. Using scMVP on customize joint profiling dataset.[**demo**]
 - Load and analyze your own data.
+
 
 ### Reference
 scMVP: an integrative generative model for joint profiling of single cell RNA-seq and ATAC-seq data. 2020

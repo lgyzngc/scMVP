@@ -56,7 +56,7 @@ class scMVP_dataloader(GeneExpressionDataset):
     def __init__(
         self,
         dataset_name: dict = None,
-        save_path: str = "E:/data/qiliu/single-cell program/ATAC/snare data/",
+        save_path: str = "dataset/",
         type: str = "filtered",
         dense: bool = False,
         measurement_names_column: int = 0,
