@@ -34,10 +34,10 @@ class DispatchingFormatter(logging.Formatter):
 
 
 def set_verbosity(level: Union[str, int]):
-    """Sets logging configuration for scvi based on chosen level of verbosity.
+    """Sets logging configuration for scMVP based on chosen level of verbosity.
 
-    Sets "scvi" logging level to `level`
-    If "scvi" logger has no StreamHandler, add one.
+    Sets "scMVP" logging level to `level`
+    If "scMVP" logger has no StreamHandler, add one.
     Else, set its level to `level`.
     """
     scMVP_logger.setLevel(level)
@@ -46,18 +46,20 @@ def set_verbosity(level: Union[str, int]):
         if isinstance(handler, logging.StreamHandler):
             handler.setLevel(level)
             logger.info(
-                "'scvi' logger already has a StreamHandler, set its level to {}.".format(
+                "'scMVP' logger already has a StreamHandler, set its level to {}.".format(
                     level
                 )
             )
             has_streamhandler = True
+
+
     if not has_streamhandler:
         ch = logging.StreamHandler()
         formatter = logging.Formatter(
             "[%(asctime)s] %(levelname)s - %(name)s | %(message)s"
         )
         ch.setFormatter(
-            DispatchingFormatter(formatter, {"scvi.autotune": autotune_formatter})
+            DispatchingFormatter(formatter, {"scMVP.autotune": autotune_formatter})
         )
         scMVP_logger.addHandler(ch)
-        logger.info("Added StreamHandler with custom formatter to 'scvi' logger.")
+        logger.info("Added StreamHandler with custom formatter to 'scMVP' logger.")
