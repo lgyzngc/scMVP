@@ -44,7 +44,7 @@ Your should first renaming your input files as followings:
 2. Using scMVP for snare-seq mouse cerebral cortex P0 dataset. [**demo**](demos/scMVP_regress_tutorial.ipynb)
 - Perform CRE-gene analysis with PLS-regression.
 
-3. Using scMVP on customize joint profiling dataset.[**demo**]
+3. Using scMVP on customize joint profiling dataset.[**demo**](demos/scMVP_dataloader.ipynb)
 - Load and analyze your own data.
 
 
