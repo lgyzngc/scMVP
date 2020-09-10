@@ -10,7 +10,7 @@ import scipy.io as sp_io
 import shutil
 from scipy.sparse import csr_matrix, issparse
 
-from scvi.dataset.dataset import CellMeasurement, GeneExpressionDataset, _download
+from scMVP.dataset.dataset import CellMeasurement, GeneExpressionDataset, _download
 
 logger = logging.getLogger(__name__)
 

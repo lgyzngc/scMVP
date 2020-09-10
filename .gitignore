@@ -2,8 +2,11 @@
 .idea/
 venv/
 data/
-
-
+*.pkl
+*.csv
+*.tsv
+*.mtx
+demos/dataset/*.txt
 
 
 # Byte-compiled / optimized / DLL files
