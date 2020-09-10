@@ -10,7 +10,6 @@ data/
 __pycache__/
 *.py[cod]
 *$py.class
-*.ipynb
 # necessary files
 !tests/notebooks/scMVP_regress_tutorial.ipynb
 !tests/notebooks/scMVP_tutorial.ipynb
