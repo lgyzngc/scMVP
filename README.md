@@ -9,6 +9,8 @@ scMVP requires Python3.7.x and [**Pytorch**](http://pytorch.org).<br>
 For example, use [**miniconda**](https://conda.io/miniconda.html) to install python and pytorch of CPU or GPU version.
 ```Bash
 conda install -c pytorch python=3.7 pytorch
+# if you do not have jupyter notebook/ipython notebook, you can also install by conda
+conda install jupyter
 ```
 
 Then you can install scMVP from github repo:<br>

@@ -11,8 +11,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 # necessary files
-!tests/notebooks/scMVP_regress_tutorial.ipynb
-!tests/notebooks/scMVP_tutorial.ipynb
 # C extensions
 *.so
 

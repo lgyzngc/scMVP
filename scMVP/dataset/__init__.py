@@ -18,6 +18,7 @@ from scMVP.dataset.loom import (
     PreFrontalCortexStarmapDataset,
     FrontalCortexDropseqDataset,
 )
+from scMVP.dataset.scMVP_dataloader import scMVP_dataloader
 from scMVP.dataset.pbmc import PbmcDataset, PurifiedPBMCDataset
 from scMVP.dataset.pairedSeqDataset import pairedSeqDataset
 from scMVP.dataset.seqfish import SeqfishDataset
@@ -59,6 +60,7 @@ __all__ = [
     "PbmcDataset",
     "PurifiedPBMCDataset",
     "scienceDataset",
+    "scMVP_dataloader",
     "SeqfishDataset",
     "SeqFishPlusDataset",
     "SmfishDataset",
