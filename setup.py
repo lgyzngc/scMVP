@@ -17,9 +17,10 @@ requirements = [
     # "nbformat>=4.4.0",
     # "jupyter>=1.0.0",
     # "ipython>=7.1.1",
-    "anndata==0.6.22.post1",
+    # "anndata==0.6.22.post1",
     # "scanpy==1.4.4.post1",
-    "scanpy>=1.4",
+    "anndata>=0.7",
+    "scanpy>=1.4.6",
     "scikit-learn==0.22.2",
     "numba==0.48",  # numba 0.45.1 has a conflict with UMAP and numba 0.46.0 with parallelization in loompy
     "hyperopt==0.1.2",
