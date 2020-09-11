@@ -8,6 +8,7 @@ data/
 *.mtx
 demos/dataset/*.txt
 analysis_script
+requirement.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
