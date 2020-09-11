@@ -30,7 +30,7 @@ Your should first renaming your input files as followings:
 2. "XX_gene.count.mtx" or  "XX_gene.count.tsv": gene expression matrix <br>
 3. "XX_cDNA.genes.tsv": gene names <br>
 4. "XX_cell.ATAC.tsv": cell barcodes of ATAC <br>
-5. "XX_chromatin.counts.mtx": gene expression matrix  <br>
+5. "XX_chromatin.count.mtx" or  "XX_chromatin.count.tsv": atac expression matrix  <br>
 6. "XX_peak.tsv": peak names/ids <br>
 
 **Optional:**<br>

@@ -66,10 +66,9 @@ class scienceDataset(GeneExpressionDataset):
     :param delayed_populating: Whether to populate dataset with a delay
 
     Examples:
-        >>> tenX_dataset = scienceDataset("CellLineMixture")
+        >>> science_daset = scienceDataset("CellLineMixture")
 
-    .. _10x:
-        http://cf.10xgenomics.com/
+
     """
 
 

@@ -1308,6 +1308,7 @@ def concatenate_arrays(arrays):
     return concatenation
 
 
+# noinspection PyPackageRequirements
 class DownloadableDataset(GeneExpressionDataset, ABC):
     """Sub-class of ``GeneExpressionDataset`` which downloads its data to disk and
     then populates its attributes with it.
