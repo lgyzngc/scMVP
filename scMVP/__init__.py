@@ -3,7 +3,7 @@
 
 __author__ = "Gaoyang Li"
 __email__ = "lgyzngc@tongji.edu.cn"
-__version__ = "0.1.0"
+__version__ = "0.0.1"
 
 # Set default logging handler to avoid logging with logging.lastResort logger.
 import logging
