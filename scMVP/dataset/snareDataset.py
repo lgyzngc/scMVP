@@ -64,10 +64,8 @@ class snareDataset(GeneExpressionDataset):
     :param delayed_populating: Whether to populate dataset with a delay
 
     Examples:
-        >>> tenX_dataset = snare("P0_BrainCortex")
+        >>> snare_dataset = snare("P0_BrainCortex")
 
-    .. _10x:
-        http://cf.10xgenomics.com/
     """
 
 

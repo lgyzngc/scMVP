@@ -2,18 +2,19 @@
 .idea/
 venv/
 data/
-
-
-
+*.pkl
+*.csv
+*.tsv
+*.mtx
+demos/dataset/*.txt
+analysis_script
+requirement.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-*.ipynb
 # necessary files
-!tests/notebooks/scMVP_regress_tutorial.ipynb
-!tests/notebooks/scMVP_tutorial.ipynb
 # C extensions
 *.so
 

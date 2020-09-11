@@ -23,14 +23,14 @@ available_datasets = {
             "Cell_Mix_peak.count.mtx",
             "Cell_Mix_embeddings.xls"
         ],
-        "Adult_Cerebrail": [
-            "Adult_Cerebrail_Cortex_cell.tsv",
-            "Adult_Cerebrail_Cortex_gene.tsv",
-            "Adult_Cerebrail_Cortex_gene.count.mtx",
-            "Adult_Cerebrail_Cortex_cell.ATAC.tsv",
-            "Adult_Cerebrail_Cortex_peak.tsv",
-            "Adult_Cerebrail_Cortex_peak.count.mtx",
-            "Adult_Cerebrail_Cortex_embeddings.xls",
+        "Adult_Cerebral": [
+            "Adult_Cerebral_Cortex_cell.tsv",
+            "Adult_Cerebral_Cortex_gene.tsv",
+            "Adult_Cerebral_Cortex_gene.count.mtx",
+            "Adult_Cerebral_Cortex_cell.ATAC.tsv",
+            "Adult_Cerebral_Cortex_peak.tsv",
+            "Adult_Cerebral_Cortex_peak.count.mtx",
+            "Adult_Cerebral_Cortex_embeddings.xls",
         ],
         "Fetal_Forebrain": [
             "Fetal_Forebrain_cell.tsv",
@@ -54,6 +54,7 @@ available_suffix = {
 }
 available_specification = ["filtered", "raw"]
 
+
 class pairedSeqDataset(GeneExpressionDataset):
     """Loads a file from `10x`_ website.
 
@@ -71,17 +72,16 @@ class pairedSeqDataset(GeneExpressionDataset):
     :param delayed_populating: Whether to populate dataset with a delay
 
     Examples:
-        >>> tenX_dataset = scienceDataset("CellLineMixture")
+        >>> pair_dataset = pairedSeqDataset("CellLineMixture")
 
-    .. _10x:
-        http://cf.10xgenomics.com/
+
     """
 
 
     def __init__(
         self,
         dataset_name: str = None,
-        save_path: str = "E:/data/qiliu/single-cell program/ATAC/paired seq/",
+        save_path: str = "dataset/",
         type: str = "filtered",
         dense: bool = False,
         measurement_names_column: int = 0,

@@ -8,17 +8,21 @@ requirements = [
     "numpy>=1.16.2",
     "torch>=1.0.1",
     "matplotlib>=3.0.3",
-    "scikit-learn>=0.20.3",
     "h5py>=2.9.0",
     "pandas>=0.24.2",
     "loompy>=2.0.16",
     "tqdm>=4.31.1",
     "xlrd>=1.2.0",
-    "nbconvert>=5.4.0",
-    "nbformat>=4.4.0",
-    "jupyter>=1.0.0",
-    "ipython>=7.1.1",
-    "numba==0.45.0",  # numba 0.45.1 has a conflict with UMAP and numba 0.46.0 with parallelization in loompy
+    # "nbconvert>=5.4.0",
+    # "nbformat>=4.4.0",
+    # "jupyter>=1.0.0",
+    # "ipython>=7.1.1",
+    # "anndata==0.6.22.post1",
+    # "scanpy==1.4.4.post1",
+    "anndata>=0.7",
+    "scanpy>=1.4.6",
+    "scikit-learn==0.22.2",
+    "numba==0.48",  # numba 0.45.1 has a conflict with UMAP and numba 0.46.0 with parallelization in loompy
     "hyperopt==0.1.2",
 ]
 
@@ -35,7 +39,6 @@ test_requirements = [
 
 extras_requirements = {
     "notebooks": [
-        "scanpy>=1.4",
         "louvain>=0.6.1",
         "python-igraph>=0.7.1.post6",
         "colour>=0.1.5",
@@ -57,7 +60,7 @@ author = (
 
 setup(
     author=author,
-    author_email="romain_lopez@berkeley.edu",
+    author_email="lgyzngc@tongji.edu.cn",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Science/Research",
@@ -67,7 +70,7 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: Microsoft :: Windows",
         "Operating System :: POSIX :: Linux",
-        "Topic :: Scientific/Engineering :: Bio-Informatics",
+        "Topic :: Scientific/Engineering :: bioinformatics",
     ],
     description="Single-cell Variational Inference",
     install_requires=requirements+extras_requirements["notebooks"],
