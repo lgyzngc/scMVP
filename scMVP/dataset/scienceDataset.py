@@ -75,7 +75,7 @@ class scienceDataset(GeneExpressionDataset):
     def __init__(
         self,
         dataset_name: str = None,
-        save_path: str = "E:/data/qiliu/single-cell program/ATAC/science data/",
+        save_path: str = "dataset/",
         type: str = "filtered",
         dense: bool = False,
         measurement_names_column: int = 0,
