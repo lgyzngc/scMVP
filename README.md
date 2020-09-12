@@ -34,6 +34,9 @@ Your should first prepare your input files, example is as follows:
 6. "XX_peak.tsv": peak names/ids <br>
 
 ### Bulit in dataset:
+- dataset.scienceDataset(): sci-CAR paper dataset.<br>
+- dataset.pairedSeqDataset(): Paired-seq paper dataset.<br>
+- dataset.snareDataset(): SNARE-seq dataset.<br>
 
 
 **Optional:**<br>
