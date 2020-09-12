@@ -226,10 +226,10 @@ def auto_tune_scvi_model(
     fmin_timer: float = None,
     mongo_port: str = "1234",
     mongo_host: str = "localhost",
-    db_name: str = "scvi_db",
+    db_name: str = "scMVP_db",
     multiple_hosts: bool = False,
 ) -> (Type[Trainer], Trials):
-    """Perform automatic hyperparameter optimization of an scVI model
+    """Perform automatic hyperparameter optimization of an scMVP model
     and return best model and hyperopt Trials object.
 
     ``Trials`` object contains hyperparameter space and loss history for each trial.
