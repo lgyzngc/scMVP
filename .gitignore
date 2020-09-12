@@ -9,6 +9,7 @@ data/
 demos/dataset/*.txt
 analysis_script
 requirement.txt
+docs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
