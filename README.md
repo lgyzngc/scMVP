@@ -24,7 +24,7 @@ python setup.py install
 Try ```import scMVP``` in your python console and start your first [**tutorial**](demos/scMVP_tutorial.ipynb) with scMVP!
 
 ## Data preparation
-Your should first renaming your input files as followings:
+Your should first prepare your input files, example is as follows:
 
 1. "XX_cell.tsv": cell barcodes of RNA <br>
 2. "XX_gene.count.mtx" or  "XX_gene.count.tsv": gene expression matrix <br>
