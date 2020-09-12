@@ -302,8 +302,6 @@ def log_mixture_nb(x, mu_1, mu_2, theta_1, theta_2, pi, eps=1e-8):
     log likelihood (scalar) of a minibatch according to a mixture nb model.
     pi is the probability to be in the first component.
 
-    For totalVI, the first component should be background.
-
     Variables:
     mu1: mean of the first negative binomial component (has to be positive support) (shape: minibatch x genes)
     theta1: first inverse dispersion parameter (has to be positive support) (shape: minibatch x genes)

@@ -24,7 +24,7 @@ python setup.py install
 Try ```import scMVP``` in your python console and start your first [**tutorial**](demos/scMVP_tutorial.ipynb) with scMVP!
 
 ## Data preparation
-Your should first renaming your input files as followings:
+Your should first prepare your input files, example is as follows:
 
 1. "XX_cell.tsv": cell barcodes of RNA <br>
 2. "XX_gene.count.mtx" or  "XX_gene.count.tsv": gene expression matrix <br>
@@ -32,6 +32,12 @@ Your should first renaming your input files as followings:
 4. "XX_cell.ATAC.tsv": cell barcodes of ATAC <br>
 5. "XX_chromatin.count.mtx" or  "XX_chromatin.count.tsv": atac expression matrix  <br>
 6. "XX_peak.tsv": peak names/ids <br>
+
+### Bulit in dataset:
+- dataset.scienceDataset(): sci-CAR paper dataset.<br>
+- dataset.pairedSeqDataset(): Paired-seq paper dataset.<br>
+- dataset.snareDataset(): SNARE-seq dataset.<br>
+
 
 **Optional:**<br>
 -  "XX_embeddings.xls": given cell annotation labels. <br>

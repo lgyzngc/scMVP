@@ -12,8 +12,8 @@ class UnsupervisedTrainer(Trainer):
     r"""The VariationalInference class for the unsupervised training of an autoencoder.
 
     Args:
-        :model: A model instance from class ``VAE``, ``VAEC``, ``SCANVI``, ``AutoZIVAE``
-        :gene_dataset: A gene_dataset instance like ``CortexDataset()``
+        :model: A model instance from class ``VAE``, ``VAEC``,
+        :gene_dataset: A gene_dataset instance like ``snareDataset()``
         :train_size: The train size, either a float between 0 and 1 or an integer for the number of training samples
          to use Default: ``0.8``.
         :test_size: The test size, either a float between 0 and 1 or an integer for the number of training samples
@@ -30,7 +30,7 @@ class UnsupervisedTrainer(Trainer):
         :\*\*kwargs: Other keywords arguments from the general Trainer class.
 
     Examples:
-        >>> gene_dataset = CortexDataset()
+        >>> gene_dataset = snareDataset()
         >>> vae = VAE(gene_dataset.nb_genes, n_batch=gene_dataset.n_batches * False,
         ... n_labels=gene_dataset.n_labels)
 

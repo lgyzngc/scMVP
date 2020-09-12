@@ -28,7 +28,7 @@ class scMVP_dataloader(GeneExpressionDataset):
         "XX_chromatin.peaks.tsv":"atac_names"}
         or {"XX_cDNA.counts.tsv": "gene_expression",
     "XX_chromatin.counts.tsv":"atac_expression",}.
-    where XX represent the specific file name,
+    where XX represent the specific file prefix,
     such as: GSE126074_AdBrainCortex_SNAREseq
 
     :param save_path: Location to use when saving/loading the data.
@@ -41,7 +41,7 @@ class scMVP_dataloader(GeneExpressionDataset):
     :param is_binary: is binary of the input atac data
 
     Examples:
-        >>> tenX_dataset = scMVP_dataloader(\
+        >>> my_dataset = scMVP_dataloader(\
         {"GSE126074_AdBrainCortex_SNAREseq_cDNA.barcodes.tsv":"gene_barcodes",\
         "GSE126074_AdBrainCortex_SNAREseq_cDNA.counts.mtx": "gene_expression",\
         "GSE126074_AdBrainCortex_SNAREseq_cDNA.genes.tsv": "gene_names",\

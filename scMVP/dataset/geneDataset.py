@@ -16,14 +16,11 @@ logger = logging.getLogger(__name__)
 
 
 class geneDataset(GeneExpressionDataset):
-    """Loads a file from `10x`_ website.
+    """
 
     :param dataset_name: Name of the dataset file. Has to be one of:
         "CellLineMixture", "AdBrainCortex", "P0_BrainCortex".
     :param save_path: Location to use when saving/loading the data.
-    :param url: manual override of the download remote location.
-        Note that we already provide urls for most 10X datasets,
-        which are automatically formed only using the ``dataset_name``.
     :param type: Either `filtered` data or `raw` data.
     :param dense: Whether to load as dense or sparse.
         If False, data is cast to sparse using ``scipy.sparse.csr_matrix``.
@@ -32,7 +29,7 @@ class geneDataset(GeneExpressionDataset):
     :param delayed_populating: Whether to populate dataset with a delay
 
     Examples:
-        >>> tenX_dataset = geneDataset(RNA_data,gene_name,cell_name)
+        >>> gene_dataset = geneDataset(RNA_data,gene_name,cell_name)
 
     """
 
